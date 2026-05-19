@@ -174,10 +174,10 @@ export default function Index({ vehicles, auth, filters }) {
                     <p className="mt-4 text-neutral-400 font-medium tracking-wide">
                         L'excellence de la location automobile au Maroc.
                     </p>
-                    <div className="w-20 h-1.5 bg-red-600 mx-auto mt-6 rounded-full" />
-                    <Link href="/mes-reservations" className="inline-block border border-white/10 bg-white/5 text-white font-bold uppercase text-[10px] tracking-widest px-6 py-3 rounded-full hover:bg-white hover:text-black transition-colors">
-        Voir mes réservations
-    </Link>
+                    {/* <div className="w-20 h-1.5 bg-red-600 mx-auto mt-6 rounded-full" /> */}
+                    {/* <Link href="/mes-reservations" className="inline-block border border-white/10 bg-white/5 text-white font-bold uppercase text-[10px] tracking-widest px-6 py-3 rounded-full hover:bg-white hover:text-black transition-colors">
+                        Voir mes réservations
+                    </Link> */}
                 </div>
 
                 {/* Barre de Recherche et Filtres */}
