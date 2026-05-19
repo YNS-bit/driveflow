@@ -60,3 +60,15 @@ Route::get('/mes-reservations', [BookingController::class, 'index'])
     \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]); // Optionnel, si tu as des seeders
     return 'Base de données installée avec succès !';
 });
+Route::get('/install-db', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        
+        // Si tu as créé de fausses données (seeders), enlève les "//" au début de la ligne suivante :
+        // \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        
+        return '🚀 Base de données DriveFlow installée avec succès sur le cloud !';
+    } catch (\Exception $e) {
+        return 'Erreur de connexion : ' . $e->getMessage();
+    }
+});
