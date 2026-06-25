@@ -72,3 +72,15 @@ Route::get('/install-db', function () {
         return 'Erreur de connexion : ' . $e->getMessage();
     }
 });
+Route::post('/admin/vehicles', [VehicleController::class, 'store'])->name('vehicles.store');
+Route::delete('/admin/vehicles/{vehicle}', [App\Http\Controllers\VehicleController::class, 'destroy'])->name('admin.vehicles.destroy');
+Route::get('/catalogue/{vehicle}', [App\Http\Controllers\VehicleController::class, 'show'])->name('vehicles.show');
+Route::get('/debug-image', function () {
+    $chemin = public_path('images/default-car.jpg');
+    
+    if (file_exists($chemin)) {
+        return "SUCCÈS : Laravel voit parfaitement le fichier à cette adresse exacte : " . $chemin;
+    } 
+    
+    return "ÉCHEC : Laravel cherche le fichier ici, mais la boîte est vide : " . $chemin;
+});

@@ -6,22 +6,42 @@ use App\Enums\VehicleStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Vehicle extends Model
-{
-    // Les colonnes qu'on a le droit de remplir via un formulaire
+{    
+
     protected $fillable = [
-        
-    'brand', 'model', 'image', 'fuel_type', 'daily_price', 'type', 'status', 'mileage', 'next_maintenance_mileage', 'transmission', 'seats', 'doors', 'air_conditioning'
-];
+        'brand', 
+        'model', 
+        'image', 
+        'fuel_type', 
+        'daily_price', 
+        'type', 
+        'status', 
+        'mileage',                  // Ajouté
+        'next_maintenance_mileage', 
+        'transmission', 
+        'seats', 
+        'doors',                    // Ajouté
+        'air_conditioning' ,
+        'description',
+        'features',               // Ajouté
+    ];
     
 
-    // On transforme la chaîne de texte de la BDD en Enum PHP
-    protected $casts = [
-        'status' => VehicleStatus::class,
-    ];
+   protected $casts = [
+    'status' => VehicleStatus::class,
+    'features' => 'array',
+];
 
     // Un raccourci (Scope) pour récupérer facilement que les véhicules dispos
     public function scopeAvailable($query)
     {
         return $query->where('status', VehicleStatus::DISPONIBLE);
     }
+    public function show(\App\Models\Vehicle $vehicle)
+{
+    // On charge la vue React 'Show' et on lui passe les données de la voiture cliquée
+    return inertia('Catalog/Show', [
+        'vehicle' => $vehicle
+    ]);
+}
 }

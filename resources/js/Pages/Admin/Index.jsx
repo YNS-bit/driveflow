@@ -13,6 +13,13 @@ export default function Index({ vehicles }) {
         });
     };
 
+    // --- FONCTION DE SUPPRESSION ---
+    const handleDelete = (id) => {
+        if (confirm('Es-tu sûr de vouloir supprimer définitivement ce véhicule de la flotte ?')) {
+            router.delete(`/admin/vehicles/${id}`);
+        }
+    };
+
     // --- COULEURS DES BADGES ---
     const getStatusStyle = (status) => {
         const s = status ? status.toLowerCase() : '';
@@ -68,9 +75,16 @@ export default function Index({ vehicles }) {
                                         
                                         {/* Info Voiture */}
                                         <td className="p-6 flex items-center gap-4">
-                                            <div className="w-16 h-12 bg-neutral-950 rounded-lg overflow-hidden border border-white/10">
-                                                <img src={vehicle.image} alt={vehicle.model} className="w-full h-full object-cover" />
-                                            </div>
+                                            {/* LE NOUVEAU CODE À COLLER : */}
+{/* La div parent impose la taille stricte (ex: largeur 64, hauteur 40) */}
+<div className="w-64 h-40 shrink-0 overflow-hidden rounded-lg shadow-md">
+    <img 
+        src={vehicle.image} 
+        alt={vehicle.model} 
+        onError={(e) => { e.target.src = '/images/default-car.jpg'; }}
+        className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105" 
+    />
+</div>
                                             <div>
                                                 <p className="font-black text-white uppercase italic text-lg leading-tight">{vehicle.brand}</p>
                                                 <p className="text-red-600 font-bold text-sm uppercase">{vehicle.model}</p>
@@ -111,6 +125,15 @@ export default function Index({ vehicles }) {
                                                     className="bg-sky-500/10 text-sky-500 hover:bg-sky-500 hover:text-white border border-sky-500/20 px-3 py-2 rounded-xl text-[10px] font-bold uppercase transition-all"
                                                 >
                                                     Lavage
+                                                </button>
+                                                
+                                                {/* 👉 BOUTON SUPPRIMER AJOUTÉ ICI */}
+                                                <button 
+                                                    onClick={() => handleDelete(vehicle.id)}
+                                                    className="bg-neutral-800/50 text-neutral-400 hover:bg-red-600 hover:text-white border border-neutral-700/50 hover:border-red-600 px-3 py-2 rounded-xl text-[10px] font-bold uppercase transition-all ml-4"
+                                                    title="Supprimer définitivement"
+                                                >
+                                                    Supprimer
                                                 </button>
                                             </div>
                                         </td>

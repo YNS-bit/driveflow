@@ -1,16 +1,15 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-// On importe les composants de notre nouvelle librairie Recharts
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import AddVehicleForm from '@/Components/AddVehicleForm';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// N'oublie pas d'ajouter 'kpis' dans les paramètres ici !
-export default function Dashboard({ auth, bookings, kpis }) {
+export default function Dashboard({ auth, bookings, kpis,chartData }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
                 <h2 className="text-xl font-semibold leading-tight text-white uppercase tracking-widest">
-                    <span className="text-red-600">Tableau de Bord</span> de bord Analytics
+                    <span className="text-red-600">Tableau de Bord</span> Analytics
                 </h2>
             }
         >
@@ -26,72 +25,72 @@ export default function Dashboard({ auth, bookings, kpis }) {
                         </div>
                     </div>
 
-                    {/* --- MODULE DATA & ANALYTICS (Seulement pour l'admin qui a les kpis) --- */}
+                    {/* --- FORMULAIRE D'AJOUT DE VÉHICULE --- */}
+                    {/* Il est maintenant en dehors des conditions pour être toujours visible */}
+                    <div className="mt-8">
+                        <AddVehicleForm />
+                    </div>
+
+                    {/* --- MODULE DATA & ANALYTICS --- */}
                     {kpis && (
-                        <>
-                            {/* Les 3 Cartes KPI */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {/* Carte Chiffre d'Affaires */}
-                                <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Chiffre d'Affaires</p>
-                                        <p className="text-3xl font-bold text-white mt-2">{kpis.revenue} <span className="text-lg text-red-500">DH</span></p>
-                                    </div>
-                                    <div className="p-3 bg-green-900/30 text-green-500 rounded-lg">
-                                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                            {/* Carte Chiffre d'Affaires */}
+                            <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Chiffre d'Affaires</p>
+                                    <p className="text-3xl font-bold text-white mt-2">{kpis.revenue} <span className="text-lg text-red-500">DH</span></p>
                                 </div>
-
-                                {/* Carte Total Réservations */}
-                                <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Total Réservations</p>
-                                        <p className="text-3xl font-bold text-white mt-2">{kpis.total_bookings}</p>
-                                    </div>
-                                    <div className="p-3 bg-red-900/30 text-red-500 rounded-lg">
-                                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
-                                    </div>
-                                </div>
-
-                                {/* Carte Clients Inscrits */}
-                                <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Clients Actifs</p>
-                                        <p className="text-3xl font-bold text-white mt-2">{kpis.total_clients}</p>
-                                    </div>
-                                    <div className="p-3 bg-blue-900/30 text-blue-500 rounded-lg">
-                                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                    </div>
+                                <div className="p-3 bg-green-900/30 text-green-500 rounded-lg">
+                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
                             </div>
 
-                            {/* Le Graphique Recharts */}
-                            <div className="bg-gray-900 border border-gray-800 overflow-hidden shadow-2xl sm:rounded-2xl p-6">
-                                <h3 className="text-xl font-bold text-white uppercase tracking-wider mb-6">
-                                    <span className="text-red-600">|</span> Répartition des Statuts de Réservation
-                                </h3>
-                                <div className="h-72">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart data={kpis.status_stats}>
-                                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
-                                            <XAxis dataKey="status" stroke="#9CA3AF" />
-                                            <YAxis stroke="#9CA3AF" allowDecimals={false} />
-                                            <Tooltip 
-                                                cursor={{fill: '#1F2937'}} 
-                                                contentStyle={{backgroundColor: '#111827', borderColor: '#374151', color: '#fff'}} 
-                                            />
-                                            {/* Les barres du graphique aux couleurs du thème (Rouge DriveFlow) */}
-                                            <Bar dataKey="count" fill="#DC2626" radius={[4, 4, 0, 0]} name="Nombre" />
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                            {/* Carte Total Réservations */}
+                            <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Total Réservations</p>
+                                    <p className="text-3xl font-bold text-white mt-2">{kpis.total_bookings}</p>
+                                </div>
+                                <div className="p-3 bg-red-900/30 text-red-500 rounded-lg">
+                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
                                 </div>
                             </div>
-                        </>
+
+                            {/* Carte Clients Inscrits */}
+                            <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Clients Actifs</p>
+                                    <p className="text-3xl font-bold text-white mt-2">{kpis.total_clients}</p>
+                                </div>
+                                <div className="p-3 bg-blue-900/30 text-blue-500 rounded-lg">
+                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        
                     )}
+                    {/* --- GRAPHIQUE D'ANALYSE --- */}
+            {chartData && chartData.length > 0 && (
+                <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl mb-8">
+                    <h3 className="text-sm font-medium text-gray-400 uppercase mb-6">Évolution des Revenus</h3>
+                    <div className="h-80 w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
+                                <XAxis dataKey="date" stroke="#9CA3AF" />
+                                <YAxis stroke="#9CA3AF" />
+                                <Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none' }} />
+                                <Line type="monotone" dataKey="Revenus" stroke="#EF4444" strokeWidth={3} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            )}
 
-                    {/* --- SECTION TABLEAU DES RÉSERVATIONS (On garde notre tableau d'hier) --- */}
+
+                    {/* --- SECTION TABLEAU DES RÉSERVATIONS --- */}
                     {bookings && (
-                        <div className="bg-gray-900 border border-gray-800 overflow-hidden shadow-2xl sm:rounded-2xl">
+                        <div className="bg-gray-900 border border-gray-800 overflow-hidden shadow-2xl sm:rounded-2xl mt-8">
                             <div className="p-6 border-b border-gray-800">
                                 <h3 className="text-xl font-bold text-white uppercase tracking-wider">
                                     <span className="text-red-600">|</span> Détail des Réservations
