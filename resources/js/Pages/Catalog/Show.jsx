@@ -39,6 +39,17 @@ export default function Show({ vehicle }) {
             onSuccess: () => alert("🎉 Réservation confirmée avec succès !")
         });
     };
+    const soumettreReservation = (e) => {
+    e.preventDefault(); // Empêche le comportement par défaut
+
+    // On utilise POST pour forcer l'écriture dans la base de données
+    router.post('/reservations', {
+        vehicle_id: 5, // Remplace par ta variable si elle est dynamique (ex: vehicle.id)
+        start_date: startDate, // Ces variables viennent de tes inputs (setStartDate)
+        end_date: endDate,
+        total_price: 22400 // Remplace par ta variable de prix total
+    });
+};
 
     return (
         <div className="min-h-screen bg-neutral-950 text-white p-8 relative overflow-hidden">
@@ -125,7 +136,7 @@ export default function Show({ vehicle }) {
                                 onClick={() => setShowBookingForm(true)}
                                 className="w-full bg-white text-black font-black uppercase text-xs tracking-widest py-4 rounded-xl hover:bg-neutral-200 transition-colors"
                             >
-                                Procéder à la réservation
+                                procéder à la réservation
                             </button>
                         ) : (
                             <div className="bg-neutral-900 border border-red-600/30 rounded-[2rem] p-6 animate-in fade-in zoom-in duration-300">
@@ -167,7 +178,7 @@ export default function Show({ vehicle }) {
                         )}
                     </div>
                 </div>
-            </div>
+            </div>Proc
         </div>
     );
 }

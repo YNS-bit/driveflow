@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\VehicleController;
 
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -52,9 +53,12 @@ Route::post('/reservations', [BookingController::class, 'store'])
 Route::get('/mes-reservations', [BookingController::class, 'index'])
     ->name('bookings.index')
     ->middleware('auth');
-    Route::get('/mes-reservations/{id}/facture', [BookingController::class, 'downloadInvoice'])
+      Route::get('/mes-reservations/{id}/facture', [BookingController::class, 'downloadInvoice'])
     ->name('bookings.invoice')
     ->middleware('auth');
+    Route::post('/mes-reservations/{id}/payer', [BookingController::class, 'pay'])->name('bookings.pay');
+Route::get('/mes-reservations/{id}/success', [BookingController::class, 'success'])->name('bookings.success');
+  
     Route::get('/install-db', function () {
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]); // Optionnel, si tu as des seeders
@@ -83,4 +87,8 @@ Route::get('/debug-image', function () {
     } 
     
     return "ÉCHEC : Laravel cherche le fichier ici, mais la boîte est vide : " . $chemin;
+});
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Ajoute ici toutes tes autres routes d'admin...
 });

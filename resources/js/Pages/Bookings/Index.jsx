@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 
@@ -7,7 +6,7 @@ export default function Index({ bookings }) {
     const getStatusStyle = (status) => {
         const s = status ? status.toLowerCase() : '';
         if (s === 'en attente') return 'bg-yellow-500 text-black shadow-yellow-500/20';
-        if (s === 'confirmée' || s === 'confirmee') return 'bg-emerald-500 text-white shadow-emerald-500/20';
+        if (s === 'confirmée' || s === 'confirmee' || s === 'approuvée' || s === 'payée') return 'bg-emerald-500 text-white shadow-emerald-500/20';
         if (s === 'terminée' || s === 'terminee') return 'bg-neutral-600 text-white shadow-neutral-600/20';
         if (s === 'annulée' || s === 'annulee') return 'bg-red-600 text-white shadow-red-600/20';
         return 'bg-neutral-700 text-white shadow-neutral-700/20';
@@ -52,7 +51,7 @@ export default function Index({ bookings }) {
                         bookings.map((booking) => (
                             <div key={booking.id} className="bg-neutral-900/40 border border-white/5 rounded-[2rem] overflow-hidden flex flex-col relative transition-all duration-300 hover:border-white/10 shadow-xl">
                                 
-                                {/* Image de la voiture (récupérée magiquement via la relation Laravel) */}
+                                {/* Image de la voiture */}
                                 <div className="h-48 relative overflow-hidden bg-neutral-900">
                                     <img 
                                         src={booking.vehicle.image} 
@@ -84,19 +83,39 @@ export default function Index({ bookings }) {
                                         </div>
                                     </div>
 
-                                    <div className="pt-6 border-t border-white/5 flex justify-between items-end">
+                                    <div className="pt-6 border-t border-white/5 flex justify-between items-end mb-6">
                                         <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest">Montant Total</span>
                                         <p className="text-3xl font-black text-white leading-none">
                                             {booking.total_price} <span className="text-red-600 text-sm italic">DH</span>
                                         </p>
+                                    </div>
+   
+                                    {/* Section des Actions (Paiement / Facture) */}
+                                    <div className="flex flex-col gap-3 mt-auto">
+                                        
+                                        {/* Bouton de paiement (visible uniquement si "En attente") */}
+                                        {booking.status === 'En attente' && (
+                                            <Link 
+                                                href={route('bookings.pay', { id: booking.id })} 
+                                                method="post" 
+                                                as="button"
+                                                className="w-full text-center px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300"
+                                            >
+                                                💳 Payer avec Stripe
+                                            </Link>
+                                        )}
+
+                                        {/* Bouton Facture */}
+                                        <a 
+                                            href={route('bookings.invoice', { id: booking.id })} 
+                                            inertia="false" 
+                                            className="w-full text-center px-6 py-3 bg-red-600 text-white font-bold rounded-lg shadow-lg hover:bg-red-700 transition duration-300"
+                                        >
+                                            📄 Télécharger la Facture (PDF)
+                                        </a>
                                         
                                     </div>
-                                    <a 
-                                        href={`/mes-reservations/${booking.id}/facture`}
-                                        className="mt-6 w-full text-center bg-white/5 border border-white/10 hover:border-red-600 hover:bg-red-600/10 text-white hover:text-red-500 font-bold uppercase text-[10px] tracking-widest py-3.5 rounded-xl transition-all duration-300"
-                                    >
-                                        📄 Télécharger la Facture (PDF)
-                                    </a>
+
                                 </div>
                             </div>
                         ))

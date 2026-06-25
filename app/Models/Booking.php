@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     use HasFactory;
+    protected $table = 'reservations';
 
     // Les champs qu'on autorise à remplir via notre formulaire React
     protected $fillable = [

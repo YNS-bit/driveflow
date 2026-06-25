@@ -171,7 +171,7 @@
                     Avenue regueragui, Madinat Al Irfane<br>
                     10000 Rabat, Maroc<br>
                     Email : contact@driveflow.ma<br>
-                    Tél : +212 5 37 XX XX XX
+                    Tél : +212 7 62459067
                 </div>
             </td>
             <td style="width: 5%;"></td> <td class="address-box">
